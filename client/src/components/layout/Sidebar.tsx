@@ -1,37 +1,53 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { NavLink } from 'react-router-dom';
 
-interface SidebarProps {
-  currentTab: 'entries' | 'admin';
-  setCurrentTab: (tab: 'entries' | 'admin') => void;
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab }) => {
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'ADMIN';
-
+export const Sidebar: React.FC = () => {
   return (
-    <aside style={{ width: '250px', background: '#18181b', padding: '1.5rem', borderRight: '1px solid #27272a', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-      <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#fff' }}>
-        FóconFlow Menu
+    <aside className="desktop-sidebar" style={{ width: '240px', background: '#18181b', padding: '1.5rem 1rem', borderRight: '1px solid #27272a' }}>
+      <div style={{ marginBottom: '2rem', paddingLeft: '0.5rem' }}>
+        <h2 style={{ fontSize: '1rem', color: '#a1a1aa', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>
+          FóconFlow Menu
+        </h2>
       </div>
-      
+
       <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        <button 
-          onClick={() => setCurrentTab('entries')}
-          style={{ textAlign: 'left', background: currentTab === 'entries' ? '#27272a' : 'transparent', color: '#fff', border: 'none', padding: '0.7rem', borderRadius: '4px', cursor: 'pointer' }}
+        <NavLink
+          to="/entries"
+          style={({ isActive }) => ({
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            color: isActive ? '#ffffff' : '#a1a1aa',
+            background: isActive ? '#27272a' : 'transparent',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            fontWeight: isActive ? 600 : 400,
+            border: 'none',
+            outline: 'none'
+          })}
         >
-          ⏱️ Apontamentos
-        </button>
-        
-        {isAdmin && (
-          <button 
-            onClick={() => setCurrentTab('admin')}
-            style={{ textAlign: 'left', background: currentTab === 'admin' ? '#27272a' : 'transparent', color: '#fff', border: 'none', padding: '0.7rem', borderRadius: '4px', cursor: 'pointer' }}
-          >
-            📊 Visão do Gestor (DRE)
-          </button>
-        )}
+          <span>⏱️</span> Apontamentos
+        </NavLink>
+
+        <NavLink
+          to="/admin"
+          style={({ isActive }) => ({
+            padding: '0.75rem 1rem',
+            borderRadius: '6px',
+            color: isActive ? '#ffffff' : '#a1a1aa',
+            background: isActive ? '#27272a' : 'transparent',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.6rem',
+            fontWeight: isActive ? 600 : 400,
+            border: 'none',
+            outline: 'none'
+          })}
+        >
+          <span>📊</span> Visão do Gestor (DRE)
+        </NavLink>
       </nav>
     </aside>
   );

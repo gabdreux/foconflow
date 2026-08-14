@@ -23,31 +23,34 @@ export class ProjectService {
     return projects.map((proj) => {
       const projEntries = entries.filter((e) => e.project_id === proj.id);
 
-      const totalHours = projEntries.reduce((sum, e) => sum + Number(e.duration_hours), 0);
+      const totalHours = projEntries.reduce((sum, e) => sum + Number(e.duration_hours || 0), 0);
       const directLaborCost = projEntries.reduce(
-        (sum, e) => sum + Number(e.duration_hours) * Number(e.hourly_rate_applied),
+        (sum, e) => sum + Number(e.duration_hours || 0) * Number(e.hourly_rate_applied || 0),
         0
       );
 
-      const revenue = Number(proj.revenue);
-      const indirectCost = Number(proj.indirect_cost);
-      const taxRate = Number(proj.tax_rate) / 100;
+      const revenue = Number(proj.revenue || 0);
+      const indirectCost = Number(proj.indirect_cost || 0);
+      const taxRate = Number(proj.tax_rate || 0) / 100;
 
       const taxes = revenue * taxRate;
       const netRevenue = revenue - taxes;
       const totalCost = directLaborCost + indirectCost;
       const profitMargin = netRevenue - totalCost;
-      const marginPercentage = revenue > 0 ? (profitMargin / revenue) * 100 : 0;
+      const profitMarginPercentage = revenue > 0 ? (profitMargin / revenue) * 100 : 0;
 
       return {
         ...proj,
+        hoursLogged: totalHours,
+        directCost: directLaborCost,
+        indirectCost: indirectCost,
+        profitMargin: profitMargin,
+        profitMarginPercentage: profitMarginPercentage,
         totalHours,
         directLaborCost,
         taxes,
         netRevenue,
         totalCost,
-        profitMargin,
-        marginPercentage,
       };
     });
   }

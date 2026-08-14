@@ -1,51 +1,40 @@
 import React from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { NavLink } from 'react-router-dom';
 
-interface BottomNavProps {
-  currentTab: 'entries' | 'admin';
-  setCurrentTab: (tab: 'entries' | 'admin') => void;
-}
-
-export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, setCurrentTab }) => {
-  const { user } = useAuth();
-  const isAdmin = user?.role === 'ADMIN';
-
+export const BottomNav: React.FC = () => {
   return (
-    <nav style={{ 
-      display: 'flex', 
-      justifyContent: 'space-around', 
-      background: '#18181b', 
-      padding: '1rem', 
-      borderTop: '1px solid #27272a',
-      color: '#fff'
-    }}>
-      <button 
-        onClick={() => setCurrentTab('entries')}
-        style={{ 
-          background: 'none', 
-          border: 'none', 
-          color: currentTab === 'entries' ? '#60a5fa' : '#fff', 
-          cursor: 'pointer',
-          fontWeight: currentTab === 'entries' ? 'bold' : 'normal'
-        }}
+    <nav 
+      className="mobile-bottom-nav"
+      style={{ 
+        justifyContent: 'space-around', 
+        padding: '0.8rem', 
+        background: '#1a1a1a', 
+        borderTop: '1px solid #27272a' 
+      }}
+    >
+      <NavLink
+        to="/entries"
+        style={({ isActive }) => ({
+          color: isActive ? '#10b981' : '#a1a1aa',
+          textDecoration: 'none',
+          fontSize: '0.9rem',
+          fontWeight: isActive ? 'bold' : 'normal',
+        })}
       >
         ⏱️ Apontamentos
-      </button>
+      </NavLink>
 
-      {isAdmin && (
-        <button 
-          onClick={() => setCurrentTab('admin')}
-          style={{ 
-            background: 'none', 
-            border: 'none', 
-            color: currentTab === 'admin' ? '#60a5fa' : '#fff', 
-            cursor: 'pointer',
-            fontWeight: currentTab === 'admin' ? 'bold' : 'normal'
-          }}
-        >
-          📊 DRE (Gestor)
-        </button>
-      )}
+      <NavLink
+        to="/admin"
+        style={({ isActive }) => ({
+          color: isActive ? '#10b981' : '#a1a1aa',
+          textDecoration: 'none',
+          fontSize: '0.9rem',
+          fontWeight: isActive ? 'bold' : 'normal',
+        })}
+      >
+        📊 DRE (Gestor)
+      </NavLink>
     </nav>
   );
 };

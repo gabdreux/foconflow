@@ -26,4 +26,13 @@ export class ProjectController {
     }
   }
 
+  static async getKPIs(req: Request, res: Response) {
+    try {
+      const projects = await ProjectService.getAllWithKPIs();
+      return res.json(projects);
+    } catch (error: any) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
 }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
 import { TimeEntries } from './pages/TimeEntries';
@@ -8,7 +9,6 @@ import { BottomNav } from './components/layout/BottomNav';
 
 const MainContent: React.FC = () => {
   const { user, logout } = useAuth();
-  const [currentTab, setCurrentTab] = useState<'entries' | 'admin'>('entries');
 
   if (!user) {
     return <Login />;
@@ -16,7 +16,8 @@ const MainContent: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#121212', color: '#fff' }}>
-      <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+      {/* O Sidebar e BottomNav agora lerão a rota atual automaticamente */}
+      <Sidebar />
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <header style={{ 
@@ -40,11 +41,20 @@ const MainContent: React.FC = () => {
         </header>
 
         <main style={{ padding: '2rem', flex: 1 }}>
-          {currentTab === 'entries' && <TimeEntries />}
-          {currentTab === 'admin' && <AdminDashboard />}
+          <Routes>
+            {/* Rota inicial redireciona para apontamentos */}
+            <Route path="/" element={<Navigate to="/entries" replace />} />
+            
+            {/* Rotas das telas */}
+            <Route path="/entries" element={<TimeEntries />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+
+            {/* Rota padrão se o usuário digitar uma URL inexistente */}
+            <Route path="*" element={<Navigate to="/entries" replace />} />
+          </Routes>
         </main>
 
-        <BottomNav currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        <BottomNav />
       </div>
     </div>
   );
